@@ -65,7 +65,27 @@ def check_url(*args, **kwargs):
 @unittest.skipIf('fulltext' not in sys.argv, 'Skiping fulltext tests')
 class ExhaustiveFullTextCase(unittest.TestCase):
   @staticmethod
-  def check_url(args):
+  def check_url(args):  
+    url, res_filename = args
+    pubdate_failed, fulltext_failed = False, False
+    html = mock_resource_with(res_filename, 'html')
+    try:
+      a = Article(url)
+      a.download(html)
+      a.parse()
+      if a.publish_date is None:
+        pubdate_failed = True
+    except Exception:
+      print()
+      traceback.print_exc()
+      pubdate_failed, fulltext_failed = Treu, True
+    else:
+      correct_text = mock_resource_with()
+      if not ():
+        print()
+        fulltext_failed = True
+    return pubdate_failed, fulltext_failed
+    
 
 
 
