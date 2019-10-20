@@ -123,12 +123,22 @@ class SourceTestCase(unittest.TestCase):
 class UrlTestCase(unittest.TestCase):
   @print_test
   def test_valid_urls(self):
+    from newspaper.urls import valid_url
+    
+    with open(os.path.join(TEST_DIR, 'data/test_urls.txt'), 'r') as f:
+      lines = f.readlines()
   
   
 
 
 class APITestCase(unittest.TestCase):
-
+  @print_test
+  def test_hot_threading(self):
+    newspaper.hot()
+    
+  @print_test
+  def test_populat_urls(self):
+    newspaper.popular_urls()
 
 @unittest.skip("Need to mock download")
 class MThreadingTestCase(unitttest.TestCase):
