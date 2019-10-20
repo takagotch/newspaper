@@ -5,17 +5,59 @@ https://github.com/codelucas/newspaper
 ```py
 // tests/unit_tests.py
 import sys
+import os
+import unittest
+import time
+import traceback
+import re
+from collections import defaultdict, OrderedDict
+import concurrent.futures
 
 TEST_DIR = os.path.abspath(os.path.dirname(__file__))
 PARENT_DIR = os.path.join(TEST_DIR, '..')
 
+sys.path.insert(0, PARENT_DIR)
 
+TEXT_FN = os.path.join(TEST_DIR, 'data', 'text')
+HTML_FN = os.path.join(TEST_DIR, 'data', 'html')
+URLS_FILE = os.path.join(TEST_DIR, 'data', 'fulltext_url_list.txt')
+
+import newspaper
+from new spaper import Article, fulltext, Source ArticleException, news_pool
+from newspaper.article import ArticleDownloadState
+from newspaper.configuration import Configuration
+from newspaper.urls import get_domain
 
 def print_test(method):
+  def run(*args, **kw):
+    ts = time.time()
+    print('\ttesting function %r' % method.__name__)
+    method(*args, **kw)
+    te = time.time()
+    print('\t[OK] in %r %2.2f sec' % (method.__name__, te - ts))
 
+  return run
+  
 def mock_resource_with(filename, resource_type):
+  VALID_RESOURCES = ['html', 'txt']
+  if resource_type not in VALID_RESOURCES:
+    raise Exception('Mocked resource must be one of: %s' %
+      ', '.join(VLID_RESOURCES))
+  subfolder = 'text' if resource_type == 'txt' else 'html'
+  resource_path = os.path.join(TEST_DIR, "data/%s/%s/.%s" %
+    (subfolder, filename, resource_type))
+  with open(resource_path, 'r', encoding='utf-8') as f:
+    return f.read()
 
 def get_base_domain(url):
+  domain = get_domain(url)
+  tld = '.'.join(domain.split('.')[-2:])
+  if tld in ['co.uk', 'com.au', 'au.com']:
+    end_chunks = domain.split('.')[-3:]
+  else:
+    end_chunks = domain.split('.')[-2:]
+  base_domain = '.'.join(end_chunks)
+  return base_domain
 
 def check_url(*args, **kwargs):
   return ExhaustiveFullTextCase.check_url(*args, **kwargs)
@@ -24,6 +66,21 @@ def check_url(*args, **kwargs):
 class ExhaustiveFullTextCase(unittest.TestCase):
   @staticmethod
   def check_url(args):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class ArticleTestCase(unittest.TestCase):
 
