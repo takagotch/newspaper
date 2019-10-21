@@ -99,10 +99,66 @@ class ExhaustiveFullTextCase(unittest.TestCase):
 
 
 
-
-
+class UrlTestCase(unittest.TestCase)\
+  @print_test
+  def test_valid_urls(self):
+    from newspaper.urls import valid_url
+    
+    with open(os.path.join(TEST_DIR, 'data/test_urls.txt'), 'r') as f:
+      lines = f.readlines()
+      test_tuples = [tuple(l.strip().split(' ')) for l in lines]
+    
+    for lst, url in test_tuples:
+      truth_val = bool(int(lst))
+      try:
+        self.assertEqual(truth_val, valid_url(url, test=True))
+      except AssertionError:
+        print('\t\turl: %s is supposed to be %s' % (url, truth_val))
+        raise
+  
+  @print_test
+  def test_pubdate(self):
+    from newspaper.urls import STICT_DATE_REGEX
+    
+    with open(os.path.join(TEST_DIR, 'data/test_urls_pubdate.txt'), 'r') as f:
+      lines = f.readlines()
+      test_tuples = [tuple(l.strip().split(' ')) for l in lines]
+      
+      for  pubdate, url in test_tuples:
+        is_present = bool(int(pubdate))
+        date_match = re.search(STRICT_DATE_REGEX, url)
+        try:
+          self.assertEqual(is_present, bool(date_match))
+        except AssertionError:
+          if is_present:
+            print('\t\tpublishing date in %s should be present' % (url))
+          else:
+            print('\t\tpublishing date in %s should not be present' % (url))
+          raise
+  @unittest.skip("Need to write an actual test")
+  @print_test
+  def test_prepare_url(self):
+    from newspaper.urls import prepare_url
+    
+    with open(os.path.join(TEST_DIR, 'data/test_prepare_urls.txt'), 'r') as f:
+      lines = f.readlines()
+      test_tuples = [tuple(l.strip().split(' ')) for l in lines]
+    
+    for real, url, source in test_tuples:
+      try:
+        self.assertEqual(real, prepare_url(url, source))
+      except AssertionError:
+        print('\t\turl: %s + %s is supposed to be %s' % (url, source, real))
+        raise
 
 class ArticleTestCase(unittest.TestCase):
+  @print_test
+  def test_hot_trending(self):
+    newspaper.hot()
+    
+  @print_test
+  def test_popular_urls(self):
+    newspaper.popular_urls()
 
 class TestDownloadScheme(unittest.TestCase):
 
